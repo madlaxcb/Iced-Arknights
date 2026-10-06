@@ -120,8 +120,9 @@ confirm / error / loading flows.
 
 > Screenshots are archived from development milestones and may differ slightly
 > from the current build. Download the demo binaries for your platform from
-> [`dist/hud-ui-0.1.0/`](dist/hud-ui-0.1.0/) (SHA-256 checksums and a virus
-> scan report are included) to see the actual UI.
+> [GitHub Releases](https://github.com/madlaxcb/Iced-Arknights/releases) —
+> SHA-256 checksums and a virus scan report are kept under
+> [`dist/hud-ui-0.1.0/`](dist/hud-ui-0.1.0/).
 
 ## Quality gate
 

@@ -94,15 +94,20 @@ fn main() -> iced::Result {
 ./scripts/check.sh   # fmt --check + clippy -D warnings + test
 ```
 
-## 包内容与校验
+## 下载与校验
+
+演示程序（Linux / Windows x86_64）通过 GitHub Releases 分发，
+本目录在源码仓库中仅保留说明与校验文件：
 
 | 文件 | 说明 |
 |---|---|
-| `linux-x86_64/gallery`、`linux-x86_64/sample-app` | Linux x86_64 演示程序 |
-| `windows-x86_64/gallery.exe`、`windows-x86_64/sample-app.exe` | Windows x86_64 演示程序 |
-| `dark.toml` | 主题文件（与程序同目录放置生效） |
-| `CHECKSUMS.sha256` | 可执行文件 SHA-256 校验和（`sha256sum -c CHECKSUMS.sha256`） |
-| `VIRUS-SCAN.md` | 可执行文件的病毒扫描报告 |
+| [`CHECKSUMS.sha256`](CHECKSUMS.sha256) | 可执行文件 SHA-256 校验和 |
+| [`VIRUS-SCAN.md`](VIRUS-SCAN.md) | 可执行文件的病毒扫描报告（ClamAV，结果干净） |
+
+- 下载地址：<https://github.com/madlaxcb/Iced-Arknights/releases/tag/v0.1.0>
+- 资产：`hud-ui-0.1.0.zip`（zip 本身的 SHA-256 见 Release 说明）
+- 校验方式：解压后在 `hud-ui-0.1.0/` 目录内执行 `sha256sum -c CHECKSUMS.sha256`
+- 主题文件 `dark.toml` 在压缩包内，与程序同目录放置生效
 
 > README 中的截图为开发过程中的存档，可能与实际程序界面略有出入，请以实际运行效果为准。
 
