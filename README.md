@@ -63,9 +63,9 @@ cargo run -p sample-app
 # edit code/assets/theme/dark.toml while the gallery is running
 ```
 
-Note: `code/.cargo/config.toml` replaces crates.io with the rsproxy.cn mirror
-(the development environment cannot reach crates.io directly). If you don't
-need the mirror, remove the `[source.*]` sections from that file.
+Note: the repository does not pin any crates.io mirror. If crates.io is
+unreachable from your network, configure a mirror in your own `CARGO_HOME`
+`config.toml` (the development environment uses rsproxy.cn this way).
 
 ## Usage example
 

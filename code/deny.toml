@@ -1,0 +1,54 @@
+# cargo-deny 配置（计划书：依赖治理——许可证、漏洞、重复依赖）
+# 运行：cargo deny check（CI 中由 EmbarkStudios/cargo-deny-action 执行）
+
+[graph]
+# 同时覆盖 Linux 与 Windows 交叉编译目标
+targets = [
+    { triple = "x86_64-unknown-linux-gnu" },
+    { triple = "x86_64-pc-windows-gnu" },
+]
+
+[licenses]
+version = 2
+confidence-threshold = 0.93
+allow = [
+    "MIT",
+    "Apache-2.0",
+    "Apache-2.0 WITH LLVM-exception",
+    "BSD-2-Clause",
+    "BSD-3-Clause",
+    "ISC",
+    "Zlib",
+    "CC0-1.0",
+    "Unlicense",
+    "0BSD",
+    "BSL-1.0",        # Boost Software License（clipboard-win / error-code，Windows 剪贴板链）
+    "Unicode-3.0",    # unicode-ident 的 (MIT OR Apache-2.0) AND Unicode-3.0
+    # self_cell 为 "Apache-2.0 OR GPL-2.0-only"，OR 表达式满足 Apache-2.0 即通过，无需例外
+]
+
+[bans]
+multiple-versions = "warn"   # iced 生态存在已知多版本共存（winnow/bitflags/thiserror 等），先观察不阻塞
+# 注意：workspace 继承依赖（`xxx.workspace = true`）会被视为 wildcard，
+# 因此仅 warn；外部依赖在 workspace.dependencies 中均带版本号。
+wildcards = "warn"
+highlight = "all"
+
+[advisories]
+version = 2
+yanked = "warn"
+# 以下均为 iced 0.14 / cosmic-text 的传递依赖，精确锁版期间无法自行升级，
+# 待上游（iced / cosmic-text）更新后移除：
+ignore = [
+    "RUSTSEC-2024-0436", # paste unmaintained（image→ravif→rav1e 链）
+    "RUSTSEC-2026-0206", # rustybuzz unmaintained（cosmic-text/usvg 链）
+    "RUSTSEC-2026-0192", # ttf-parser unmaintained（iced/cosmic-text 字体解析）
+]
+
+[sources]
+unknown-registry = "warn"
+unknown-git = "warn"
+allow-registry = [
+    "https://github.com/rust-lang/crates.io-index",
+    "sparse+https://rsproxy.cn/index/",   # 本机 CARGO_HOME 镜像
+]

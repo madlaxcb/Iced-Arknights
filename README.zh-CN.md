@@ -58,8 +58,9 @@ cargo run -p sample-app
 # gallery 运行中修改 code/assets/theme/dark.toml 即时变色
 ```
 
-说明：`code/.cargo/config.toml` 将 crates.io 替换为 rsproxy.cn 镜像
-（开发环境直连受限）。如不需要镜像，删除该文件中的 `[source.*]` 配置即可。
+说明：仓库不内置 crates.io 镜像。如你的网络无法直连 crates.io，
+请在本机 `CARGO_HOME` 的 `config.toml` 中配置镜像
+（开发环境即以该方式使用 rsproxy.cn）。
 
 ## 用法示例
 

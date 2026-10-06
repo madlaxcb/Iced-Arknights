@@ -1,12 +1,4 @@
-# 项目级 cargo 配置：crates.io 经 rsproxy 镜像（直连被 403）
-[source.crates-io]
-replace-with = "rsproxy-sparse"
-
-[source.rsproxy-sparse]
-registry = "sparse+https://rsproxy.cn/index/"
-
-[net]
-git-fetch-with-cli = true
+# 项目级 cargo 配置（不含镜像：如需 crates.io 镜像，请配置在本机 CARGO_HOME 的 config.toml）
 
 # Windows 交叉编译（本机已装 mingw-w64）
 [target.x86_64-pc-windows-gnu]
