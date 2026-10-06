@@ -108,6 +108,8 @@ See [doc/PROGRESS.md](doc/PROGRESS.md) (M0–M6 complete, with screenshots).
 - [Migration guide (迁移指南)](doc/迁移指南.md): the iced pin and upgrade checklist.
 - [New widget guide (新组件开发指南)](doc/新组件开发指南.md): dependency direction,
   tokens, caches, and validation conventions.
+- [Changelog](CHANGELOG.md): release history.
+- [Third-party licenses](THIRD-PARTY-LICENSES.md): dependency and font notices.
 
 ## Sample app
 
@@ -127,7 +129,7 @@ confirm / error / loading flows.
 ## Quality gate
 
 ```bash
-cd code && ./scripts/check.sh   # fmt --check + clippy -D warnings + test
+cd code && ./scripts/check.sh   # fmt + clippy + test + rustdoc + benchmarks + visual snapshots
 ```
 
 ## License

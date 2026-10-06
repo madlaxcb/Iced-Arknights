@@ -68,6 +68,27 @@ jobs:
         with:
           manifest-path: code/Cargo.toml
 
+  visual:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: code
+      - run: cargo run --release -p gallery -- --compare-snapshot
+
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: code
+      - run: RUSTDOCFLAGS="-D warnings" cargo doc --workspace --no-deps
+      - run: cargo bench -p hud-core --bench geometry --no-run
+
   build:
     runs-on: windows-latest
     steps:

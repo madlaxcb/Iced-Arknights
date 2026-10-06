@@ -14,6 +14,12 @@ hud-theme.workspace = true
 hud-widgets.workspace = true
 hud-platform.workspace = true
 iced.workspace = true
+iced_futures.workspace = true
+iced_renderer.workspace = true
+iced_runtime.workspace = true
+iced_tiny_skia.workspace = true
+png.workspace = true
+tiny-skia.workspace = true
 notify.workspace = true
 
 [lints]

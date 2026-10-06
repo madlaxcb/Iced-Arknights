@@ -10,5 +10,12 @@ license.workspace = true
 hud-tokens.workspace = true
 iced.workspace = true
 
+[dev-dependencies]
+criterion.workspace = true
+
+[[bench]]
+name = "geometry"
+harness = false
+
 [lints]
 workspace = true

@@ -6,7 +6,7 @@
 //!
 //! 0.14 API 备忘（M0 实测结论，供 ADR-001 引用）：
 //! - `StyleFn<'a, Theme> = Box<dyn Fn(&Theme, Status) -> Style + 'a>`，
-//!   `.class()` 需要 `Box::new(f) as StyleFn` 显式装箱（std 无 From<fn> for Box<dyn Fn>）；
+//!   `.class()` 需要 `Box::new(f) as StyleFn` 显式装箱（std 无 `From<fn>` for `Box<dyn Fn>`）；
 //! - `column!/row!/stack!` 宏在子元素处调用 `Element::from`，会把 Theme 钉死为
 //!   `iced::Theme`，自定义主题必须用 `Column::<Msg, Theme>::with_children` 显式构建；
 //! - `container::Catalog` 已无 Status 参数（0.14 移除）；

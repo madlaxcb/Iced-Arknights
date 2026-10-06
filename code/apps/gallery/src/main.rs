@@ -7,7 +7,17 @@
 use hud_theme::HudTheme;
 use hud_widgets::{column, prelude::*, row};
 
+mod snapshot;
+
 fn main() -> iced::Result {
+    let args: Vec<String> = std::env::args().collect();
+    if args.iter().any(|arg| arg == "--snapshot") {
+        return snapshot::run();
+    }
+    if args.iter().any(|arg| arg == "--compare-snapshot") {
+        return snapshot::compare();
+    }
+
     iced::application(Gallery::new, Gallery::update, Gallery::view)
         .title(|_: &Gallery| String::from("hud-ui gallery"))
         .theme(|g: &Gallery| g.theme.clone())

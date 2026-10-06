@@ -22,6 +22,11 @@ iced = { version = "=0.14.0", features = [
     "tokio",
     "x11",
 ] }
+iced_renderer = "=0.14.0"
+iced_runtime = "=0.14.0"
+iced_tiny_skia = "=0.14.1"
+png = "0.18"
+tiny-skia = "0.11"
 # 与 iced 精确同版：0.14 未再导出 subscription 自由函数（filter_map 等）
 iced_futures = "=0.14.0"
 serde = { version = "1.0", features = ["derive"] }
@@ -29,6 +34,7 @@ toml = "0.9"
 thiserror = "2.0"
 notify = "8.0"
 tokio = { version = "1", default-features = false, features = ["sync"] }
+criterion = "0.5"
 
 # 内部依赖（单向：tokens → core → theme → widgets）
 hud-tokens = { path = "crates/hud-tokens" }

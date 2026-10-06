@@ -101,6 +101,8 @@ fn main() -> iced::Result {
 - [组件 API](doc/组件API.md)：组件定位、构造入口与状态流。
 - [迁移指南](doc/迁移指南.md)：当前 iced 锁版与升级检查步骤。
 - [新组件开发指南](doc/新组件开发指南.md)：依赖方向、Token、Cache 与验证约定。
+- [更新日志](CHANGELOG.md)：版本变更记录。
+- [第三方许可清单](THIRD-PARTY-LICENSES.md)：依赖与字体许可说明。
 
 ## Sample App
 
@@ -117,7 +119,7 @@ fn main() -> iced::Result {
 ## 质量门
 
 ```bash
-cd code && ./scripts/check.sh   # fmt --check + clippy -D warnings + test
+cd code && ./scripts/check.sh   # fmt + clippy + test + rustdoc + benchmark + 视觉回归
 ```
 
 ## 许可

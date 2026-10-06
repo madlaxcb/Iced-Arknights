@@ -1,4 +1,4 @@
-# 质量门（本机代替 CI）：tiny_skia 版本锁 + fmt + clippy + test
+# 质量门（本机代替 CI）：tiny_skia 版本锁 + fmt + clippy + test + rustdoc
 # 用法：CARGO_HOME=... ./scripts/check.sh
 set -e
 cd "$(dirname "$0")/.."
@@ -12,3 +12,6 @@ grep -A1 'name = "iced_tiny_skia"' Cargo.lock | grep -q 'version = "0.14.1"' || 
 cargo fmt --check
 cargo clippy --workspace --all-targets -- -D warnings
 cargo test --workspace
+RUSTDOCFLAGS="-D warnings" cargo doc --workspace --no-deps
+cargo bench -p hud-core --bench geometry --no-run
+cargo run --release -p gallery -- --compare-snapshot

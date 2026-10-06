@@ -12,3 +12,4 @@
 
 # 构建产物（code/.gitignore 已覆盖 code/target/，此处双保险）
 /code/target/
+/code/visual-baselines/.current/
