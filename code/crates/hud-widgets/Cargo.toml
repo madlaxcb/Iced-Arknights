@@ -1,0 +1,17 @@
+[package]
+name = "hud-widgets"
+description = "HUD 风格组件库——组件集合（panel/card/button/nav/list/modal 等）"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[dependencies]
+hud-tokens.workspace = true
+hud-core.workspace = true
+hud-theme.workspace = true
+iced.workspace = true
+iced_futures.workspace = true
+
+[lints]
+workspace = true

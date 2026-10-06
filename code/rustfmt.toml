@@ -1,0 +1,3 @@
+# 硬折行 100 列，其余默认
+max_width = 100
+use_field_init_shorthand = true

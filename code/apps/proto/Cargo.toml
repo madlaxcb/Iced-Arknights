@@ -1,0 +1,11 @@
+[package]
+name = "proto"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish = false
+description = "M0 技术预研原型：切角外形（P1）+ 自定义 Theme（P5）"
+
+[dependencies]
+iced.workspace = true

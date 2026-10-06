@@ -1,0 +1,4 @@
+target/
+**/*.rs.bk
+dist/**/*.zip
+assets/theme/*.local.toml

@@ -1,0 +1,14 @@
+# 项目级 cargo 配置：crates.io 经 rsproxy 镜像（直连被 403）
+[source.crates-io]
+replace-with = "rsproxy-sparse"
+
+[source.rsproxy-sparse]
+registry = "sparse+https://rsproxy.cn/index/"
+
+[net]
+git-fetch-with-cli = true
+
+# Windows 交叉编译（本机已装 mingw-w64）
+[target.x86_64-pc-windows-gnu]
+linker = "x86_64-w64-mingw32-gcc"
+ar = "x86_64-w64-mingw32-ar"

@@ -1,0 +1,56 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/*",
+    "apps/*",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.88"
+license = "Apache-2.0"
+
+[workspace.dependencies]
+# 精确锁版本（计划书 2.1）：升级只在独立分支进行
+iced = { version = "=0.14.0", features = [
+    "canvas",
+    "advanced",
+    "lazy",
+    "svg",
+    "image",
+    "tokio",
+    "x11",
+] }
+# 与 iced 精确同版：0.14 未再导出 subscription 自由函数（filter_map 等）
+iced_futures = "=0.14.0"
+serde = { version = "1.0", features = ["derive"] }
+toml = "0.9"
+thiserror = "2.0"
+notify = "8.0"
+tokio = { version = "1", default-features = false, features = ["sync"] }
+
+# 内部依赖（单向：tokens → core → theme → widgets）
+hud-tokens = { path = "crates/hud-tokens" }
+hud-core = { path = "crates/hud-core" }
+hud-theme = { path = "crates/hud-theme" }
+hud-widgets = { path = "crates/hud-widgets" }
+hud-icons = { path = "crates/hud-icons" }
+hud-platform = { path = "crates/hud-platform" }
+hud-testkit = { path = "crates/hud-testkit" }
+
+# 开发期对依赖启用优化，避免 debug 构建下 UI 卡顿（计划书 3.5）
+[profile.dev.package."*"]
+opt-level = 3
+
+[profile.release]
+lto = "thin"
+codegen-units = 1
+
+[workspace.lints.rust]
+missing_docs = "warn"
+unsafe_code = "deny"
+
+[workspace.lints.clippy]
+all = { level = "warn", priority = -1 }
+# 组件目录禁止字面颜色/尺寸由 hud-tokens 单测 + 走查保障（计划书 6.2）

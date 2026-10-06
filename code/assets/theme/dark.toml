@@ -1,0 +1,48 @@
+# HUD 暗色主题（初始值来自计划书附录 B，M2 校准后为准）
+# 修改本文件并保存，debug 构建下的 gallery 会即时重载。
+
+[palette]
+bg0 = { r = 14, g = 15, b = 17 }
+bg1 = { r = 22, g = 24, b = 28 }
+bg2 = { r = 31, g = 34, b = 40 }
+line_dim = { r = 44, g = 48, b = 55 }
+line_base = { r = 58, g = 63, b = 71 }
+line_strong = { r = 90, g = 96, b = 107 }
+text_primary = { r = 230, g = 232, b = 235 }
+text_secondary = { r = 138, g = 144, b = 153 }
+text_disabled = { r = 85, g = 90, b = 99 }
+accent = { r = 255, g = 212, b = 0 }
+info = { r = 63, g = 182, b = 255 }
+danger = { r = 255, g = 77, b = 79 }
+success = { r = 74, g = 222, b = 128 }
+
+[geometry]
+[geometry.space]
+xs = 4.0
+s = 8.0
+m = 12.0
+l = 16.0
+xl = 24.0
+xxl = 32.0
+
+[geometry.chamfer]
+s = 4.0
+m = 8.0
+l = 12.0
+
+[geometry.line]
+base = 1.0
+strong = 2.0
+
+[typography]
+xxs = 12.0
+xs = 14.0
+s = 16.0
+m = 20.0
+l = 28.0
+xl = 40.0
+
+[motion]
+feedback_ms = 120
+transition_ms = 200
+overlay_ms = 280

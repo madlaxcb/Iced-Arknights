@@ -1,0 +1,15 @@
+[package]
+name = "hud-platform"
+description = "HUD 风格组件库——平台集成（窗口操作、DPI、系统设置查询）"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[dependencies]
+iced.workspace = true
+
+# 计划书 6.2：unsafe 仅允许出现在 hud-platform（cfg(windows) 平台调用），
+# 在对应模块文件内以 #![allow(unsafe_code)] + // SAFETY: 注释形式局部放开
+[lints]
+workspace = true

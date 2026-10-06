@@ -1,0 +1,14 @@
+[package]
+name = "hud-testkit"
+description = "HUD 风格组件库——测试辅助（样式快照、几何断言）"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[dependencies]
+hud-tokens.workspace = true
+hud-theme.workspace = true
+
+[lints]
+workspace = true

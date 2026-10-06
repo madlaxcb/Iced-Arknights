@@ -1,0 +1,18 @@
+[package]
+name = "hud-icons"
+description = "HUD 风格组件库——内嵌 SVG 图标与装饰素材"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[dependencies]
+iced.workspace = true
+
+[features]
+default = []
+# 扩展图标集（体积敏感的应用可关闭）
+icons-extended = []
+
+[lints]
+workspace = true

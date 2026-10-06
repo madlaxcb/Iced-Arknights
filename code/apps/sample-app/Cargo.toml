@@ -1,0 +1,17 @@
+[package]
+name = "sample-app"
+description = "示例应用：真实业务流程（M6 填充四个页面）"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish = false
+
+[dependencies]
+hud-tokens.workspace = true
+hud-theme.workspace = true
+hud-widgets.workspace = true
+iced.workspace = true
+
+[lints]
+workspace = true

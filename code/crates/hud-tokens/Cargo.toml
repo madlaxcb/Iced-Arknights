@@ -1,0 +1,16 @@
+[package]
+name = "hud-tokens"
+description = "HUD 风格组件库——设计 Token（纯数据，可 serde）"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[dependencies]
+serde.workspace = true
+
+[dev-dependencies]
+toml.workspace = true
+
+[lints]
+workspace = true
