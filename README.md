@@ -118,6 +118,11 @@ confirm / error / loading flows.
 |---|---|---|---|
 | ![Dashboard](doc/m6-sample-dashboard.png) | ![Nodes](doc/m6-sample-nodes.png) | ![Settings](doc/m6-sample-settings.png) | ![Dialog flow](doc/m6-sample-dialog-flow.png) |
 
+> Screenshots are archived from development milestones and may differ slightly
+> from the current build. Download the demo binaries for your platform from
+> [`dist/hud-ui-0.1.0/`](dist/hud-ui-0.1.0/) (SHA-256 checksums and a virus
+> scan report are included) to see the actual UI.
+
 ## Quality gate
 
 ```bash

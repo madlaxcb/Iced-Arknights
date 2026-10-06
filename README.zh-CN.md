@@ -109,6 +109,10 @@ fn main() -> iced::Result {
 |---|---|---|---|
 | ![Dashboard](doc/m6-sample-dashboard.png) | ![Nodes](doc/m6-sample-nodes.png) | ![Settings](doc/m6-sample-settings.png) | ![Dialog flow](doc/m6-sample-dialog-flow.png) |
 
+> 截图为开发里程碑的存档，可能与当前版本的实际界面略有出入。
+> 可在 [`dist/hud-ui-0.1.0/`](dist/hud-ui-0.1.0/) 下载对应平台的演示程序
+> （附带 SHA-256 校验和与病毒扫描报告）查看实际效果。
+
 ## 质量门
 
 ```bash

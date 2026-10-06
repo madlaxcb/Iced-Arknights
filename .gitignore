@@ -1,8 +1,10 @@
 # 本机目录与内部资料，不入库
 /dev/
-/dist/
 /CLAUDE.md
 /iced-hypergryph-ui-dev-plan.md
+
+# dist 入库仅保留解压目录；zip 与目录内容重复且体积大，不入库
+/dist/**/*.zip
 
 # 构建产物（code/.gitignore 已覆盖 code/target/，此处双保险）
 /code/target/
