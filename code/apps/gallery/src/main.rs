@@ -121,6 +121,8 @@ struct Gallery {
     window: Option<iced::window::Id>,
     // M5：浮层 / 动效
     modal_open: Option<usize>,
+    context_menu_open: bool,
+    context_menu_state: hud_widgets::context_menu::ContextMenuState,
     toasts: hud_widgets::toast::ToastState,
     loading_on: bool,
     loading_phase: f32,
@@ -192,6 +194,14 @@ enum Message {
     ToggleLoading,
     /// 动画帧（页面切换淡入期间驱动重绘）
     Frame,
+    /// 打开 ContextMenu
+    OpenContextMenu,
+    /// 关闭 ContextMenu
+    CloseContextMenu,
+    /// 执行 ContextMenu 项
+    ContextMenuSelect(usize),
+    /// ContextMenu 键盘导航
+    ContextMenuKey(hud_widgets::context_menu::ContextMenuKey),
 }
 
 impl Gallery {
@@ -211,6 +221,8 @@ impl Gallery {
                 editor: iced::widget::text_editor::Content::new(),
                 window: None,
                 modal_open: None,
+                context_menu_open: false,
+                context_menu_state: hud_widgets::context_menu::ContextMenuState::new(),
                 toasts: hud_widgets::toast::ToastState::default(),
                 loading_on: true,
                 loading_phase: 0.0,
@@ -283,6 +295,40 @@ impl Gallery {
             Message::LoadingTick => self.loading_phase = (self.loading_phase + 0.02).fract(),
             Message::ToggleLoading => self.loading_on = !self.loading_on,
             Message::Frame => {}
+            Message::OpenContextMenu => {
+                self.context_menu_open = true;
+                self.context_menu_state = hud_widgets::context_menu::ContextMenuState::new();
+            }
+            Message::CloseContextMenu => self.context_menu_open = false,
+            Message::ContextMenuSelect(id) => {
+                self.context_menu_open = false;
+                self.theme_status = format!("ContextMenu 项 {id} 已执行");
+            }
+            Message::ContextMenuKey(key) => match key {
+                hud_widgets::context_menu::ContextMenuKey::Previous => {
+                    self.context_menu_state.move_previous(&[
+                        hud_widgets::context_menu::ContextMenuItem::action(1, "打开 / OPEN"),
+                        hud_widgets::context_menu::ContextMenuItem::action(2, "重命名 / RENAME"),
+                    ]);
+                }
+                hud_widgets::context_menu::ContextMenuKey::Next => {
+                    self.context_menu_state.move_next(&[
+                        hud_widgets::context_menu::ContextMenuItem::action(1, "打开 / OPEN"),
+                        hud_widgets::context_menu::ContextMenuItem::action(2, "重命名 / RENAME"),
+                    ]);
+                }
+                hud_widgets::context_menu::ContextMenuKey::Activate => {
+                    if let Some(id) = self.context_menu_state.activate(&[
+                        hud_widgets::context_menu::ContextMenuItem::action(1, "打开 / OPEN"),
+                        hud_widgets::context_menu::ContextMenuItem::action(2, "重命名 / RENAME"),
+                    ]) {
+                        return self.update(Message::ContextMenuSelect(id));
+                    }
+                }
+                hud_widgets::context_menu::ContextMenuKey::Dismiss => {
+                    self.context_menu_open = false;
+                }
+            },
             Message::TitleBar(cmd) => {
                 let Some(id) = self.window else {
                     return Task::none();
@@ -318,6 +364,9 @@ impl Gallery {
         // M5：仅在需要时订阅（计划书 2.5）
         if self.modal_open.is_some() {
             subs.push(hud_widgets::modal::escape_listener(Message::CloseModal));
+        }
+        if self.context_menu_open {
+            subs.push(hud_widgets::context_menu::keyboard_listener().map(Message::ContextMenuKey));
         }
         if !self.toasts.is_empty() {
             subs.push(iced::time::every(Duration::from_millis(250)).map(|_| Message::ToastTick));
@@ -569,6 +618,7 @@ impl Gallery {
 
     fn components_page(&self) -> Element<'_, Message> {
         use hud_widgets::button::{class, ButtonVariant};
+        use hud_widgets::context_menu::{context_menu, ContextMenuItem};
         use hud_widgets::decor::{CornerBrackets, SlantedStripes};
         use hud_widgets::input::{select, tooltip};
         use hud_widgets::list::{list, ListItem};
@@ -579,6 +629,36 @@ impl Gallery {
         use hud_widgets::typography::{card, secondary_text, section_header};
 
         let tokens = self.theme.tokens;
+        let context_items = [
+            ContextMenuItem::action(1, "打开 / OPEN"),
+            ContextMenuItem::action(2, "重命名 / RENAME"),
+            ContextMenuItem::separator(3),
+            ContextMenuItem::disabled(4, "删除 / DELETE（禁用）"),
+        ];
+        let context_menu_demo = column![
+            text("ContextMenu / 受控上下文菜单").size(14),
+            button(text(if self.context_menu_open {
+                "关闭菜单 / CLOSE MENU"
+            } else {
+                "右键或点击打开 / OPEN MENU"
+            }))
+            .padding(8)
+            .on_press(if self.context_menu_open {
+                Message::CloseContextMenu
+            } else {
+                Message::OpenContextMenu
+            }),
+            if self.context_menu_open {
+                context_menu(
+                    context_items.to_vec(),
+                    self.context_menu_state,
+                    &Message::ContextMenuSelect,
+                )
+            } else {
+                text("菜单关闭时不渲染浮层").size(12).into()
+            },
+        ]
+        .spacing(8);
 
         // ---- M4.3 TitleBar（作用于本窗口；无边框窗口场景见组件文档） ----
         let title_bar_demo = title_bar(
@@ -802,6 +882,9 @@ impl Gallery {
                 section_header("输入", "INPUTS"),
                 inputs,
                 editor,
+                rule::horizontal(1),
+                section_header("上下文菜单", "CONTEXT MENU"),
+                context_menu_demo,
                 rule::horizontal(1),
                 section_header("页签", "TABS"),
                 tabs_demo,

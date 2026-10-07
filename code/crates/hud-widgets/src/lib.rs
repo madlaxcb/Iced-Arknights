@@ -8,6 +8,7 @@ pub use hud_theme::HudTheme;
 
 pub mod badge;
 pub mod button;
+pub mod context_menu;
 pub mod data_readout;
 pub mod decor;
 pub mod input;
