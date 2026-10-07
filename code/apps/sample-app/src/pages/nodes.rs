@@ -8,6 +8,16 @@ use crate::{Message, Sample};
 /// 渲染节点管理页。
 pub fn nodes(s: &Sample) -> iced::Element<'_, Message, HudTheme> {
     let tokens = s.theme.tokens;
+    let breadcrumb_items = vec![
+        hud_widgets::breadcrumb::BreadcrumbItem::new(0, "节点管理"),
+        hud_widgets::breadcrumb::BreadcrumbItem::new(1, "在线节点"),
+        hud_widgets::breadcrumb::BreadcrumbItem::new(2, "节点详情"),
+    ];
+    let breadcrumbs = hud_widgets::breadcrumb::breadcrumb(
+        breadcrumb_items,
+        s.breadcrumb_selected,
+        &Message::BreadcrumbSelect,
+    );
 
     let items: Vec<hud_widgets::list::ListItem> = s
         .nodes
@@ -84,13 +94,43 @@ pub fn nodes(s: &Sample) -> iced::Element<'_, Message, HudTheme> {
         }
     };
 
-    row![
-        iced::widget::container(list_panel)
-            .width(280.0)
-            .height(iced::Length::Shrink),
-        iced::widget::container(detail).width(iced::Length::Fill),
+    hud_widgets::column![
+        breadcrumbs,
+        row![
+            iced::widget::button(iced::widget::text(if s.node_context_menu_open {
+                "关闭节点菜单 / CLOSE MENU"
+            } else {
+                "节点操作 / NODE ACTIONS"
+            }))
+            .padding(8)
+            .on_press(if s.node_context_menu_open {
+                Message::CloseNodeContextMenu
+            } else {
+                Message::OpenNodeContextMenu
+            }),
+            if s.node_context_menu_open {
+                hud_widgets::context_menu::context_menu(
+                    vec![
+                        hud_widgets::context_menu::ContextMenuItem::action(1, "查看详情"),
+                        hud_widgets::context_menu::ContextMenuItem::action(2, "复制节点 ID"),
+                    ],
+                    s.node_context_menu_state,
+                    &Message::NodeContextMenuSelect,
+                )
+            } else {
+                iced::widget::text("菜单关闭").size(12).into()
+            },
+        ]
+        .spacing(tokens.geometry.space.s),
+        row![
+            iced::widget::container(list_panel)
+                .width(280.0)
+                .height(iced::Length::Shrink),
+            iced::widget::container(detail).width(iced::Length::Fill),
+        ]
+        .spacing(tokens.geometry.space.l),
     ]
-    .spacing(tokens.geometry.space.l)
+    .spacing(tokens.geometry.space.m)
     .into()
 }
 

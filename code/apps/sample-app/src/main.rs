@@ -84,6 +84,16 @@ pub enum Message {
     DemoLoad,
     /// 加载流程推进（16ms）
     LoadTick,
+    /// 选择节点上的 Breadcrumb
+    BreadcrumbSelect(usize),
+    /// 打开节点 ContextMenu
+    OpenNodeContextMenu,
+    /// 关闭节点 ContextMenu
+    CloseNodeContextMenu,
+    /// 执行节点 ContextMenu 项
+    NodeContextMenuSelect(usize),
+    /// ContextMenu 键盘导航
+    NodeContextMenuKey(hud_widgets::context_menu::ContextMenuKey),
     /// Toast 过期清理（250ms）
     ToastTick,
     /// 手动关闭第 index 条 Toast
@@ -114,6 +124,12 @@ pub struct Sample {
     pub nodes: Vec<NodeRecord>,
     /// 列表选中节点
     pub selected: Option<usize>,
+    /// Breadcrumb 当前节点路径索引
+    pub breadcrumb_selected: usize,
+    /// 节点 ContextMenu 是否打开
+    pub node_context_menu_open: bool,
+    /// 节点 ContextMenu 键盘状态
+    pub node_context_menu_state: hud_widgets::context_menu::ContextMenuState,
     /// 设置表单
     pub form: SettingsForm,
     /// Toast 队列
@@ -177,6 +193,9 @@ impl Sample {
             page: pages::Page::Dashboard,
             link_online: true,
             selected: Some(0),
+            breadcrumb_selected: 1,
+            node_context_menu_open: false,
+            node_context_menu_state: hud_widgets::context_menu::ContextMenuState::new(),
             nodes,
             form: SettingsForm {
                 callsign: String::from("WATCH-07"),
@@ -207,6 +226,11 @@ impl Sample {
         if self.loading.is_some() {
             subs.push(iced::time::every(Duration::from_millis(16)).map(|_| Message::LoadTick));
         }
+        if self.node_context_menu_open {
+            subs.push(
+                hud_widgets::context_menu::keyboard_listener().map(Message::NodeContextMenuKey),
+            );
+        }
 
         iced::Subscription::batch(subs)
     }
@@ -215,6 +239,43 @@ impl Sample {
         match message {
             Message::Nav(page) => self.page = page,
             Message::NodeSelect(i) => self.selected = Some(i),
+            Message::BreadcrumbSelect(i) => self.breadcrumb_selected = i,
+            Message::OpenNodeContextMenu => {
+                self.node_context_menu_open = true;
+                self.node_context_menu_state = hud_widgets::context_menu::ContextMenuState::new();
+            }
+            Message::CloseNodeContextMenu => self.node_context_menu_open = false,
+            Message::NodeContextMenuSelect(i) => {
+                self.node_context_menu_open = false;
+                self.push_toast(
+                    ToastKind::Info,
+                    "节点操作",
+                    &format!("已执行菜单项 {i}。"),
+                    Instant::now(),
+                );
+            }
+            Message::NodeContextMenuKey(key) => {
+                let items = [
+                    hud_widgets::context_menu::ContextMenuItem::action(1, "查看详情"),
+                    hud_widgets::context_menu::ContextMenuItem::action(2, "复制节点 ID"),
+                ];
+                match key {
+                    hud_widgets::context_menu::ContextMenuKey::Previous => {
+                        self.node_context_menu_state.move_previous(&items)
+                    }
+                    hud_widgets::context_menu::ContextMenuKey::Next => {
+                        self.node_context_menu_state.move_next(&items)
+                    }
+                    hud_widgets::context_menu::ContextMenuKey::Activate => {
+                        if let Some(i) = self.node_context_menu_state.activate(&items) {
+                            return self.update(Message::NodeContextMenuSelect(i));
+                        }
+                    }
+                    hud_widgets::context_menu::ContextMenuKey::Dismiss => {
+                        self.node_context_menu_open = false
+                    }
+                }
+            }
             Message::AskDisconnect => self.modal = Some(ModalKind::DisconnectLink),
             Message::AskRestart(i) => self.modal = Some(ModalKind::RestartNode(i)),
             Message::ConfirmModal => {

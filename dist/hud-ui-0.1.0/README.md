@@ -94,6 +94,14 @@ fn main() -> iced::Result {
 ./scripts/check.sh   # fmt --check + clippy -D warnings + test
 ```
 
+## 演示程序内容
+
+最新演示程序包含：
+
+- Gallery：ContextMenu、Breadcrumb，以及全部既有组件页面；
+- Sample App：节点管理页中的 Breadcrumb 导航和节点 ContextMenu 业务流程；
+- Linux 与 Windows x86_64 release 构建。
+
 ## 下载与校验
 
 演示程序（Linux / Windows x86_64）通过 GitHub Releases 分发，

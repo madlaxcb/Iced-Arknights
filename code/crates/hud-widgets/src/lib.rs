@@ -7,6 +7,7 @@
 pub use hud_theme::HudTheme;
 
 pub mod badge;
+pub mod breadcrumb;
 pub mod button;
 pub mod context_menu;
 pub mod data_readout;

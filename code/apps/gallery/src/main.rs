@@ -123,6 +123,7 @@ struct Gallery {
     modal_open: Option<usize>,
     context_menu_open: bool,
     context_menu_state: hud_widgets::context_menu::ContextMenuState,
+    breadcrumb_selected: usize,
     toasts: hud_widgets::toast::ToastState,
     loading_on: bool,
     loading_phase: f32,
@@ -202,6 +203,8 @@ enum Message {
     ContextMenuSelect(usize),
     /// ContextMenu 键盘导航
     ContextMenuKey(hud_widgets::context_menu::ContextMenuKey),
+    /// 切换 Breadcrumb 项
+    BreadcrumbSelect(usize),
 }
 
 impl Gallery {
@@ -223,6 +226,7 @@ impl Gallery {
                 modal_open: None,
                 context_menu_open: false,
                 context_menu_state: hud_widgets::context_menu::ContextMenuState::new(),
+                breadcrumb_selected: 2,
                 toasts: hud_widgets::toast::ToastState::default(),
                 loading_on: true,
                 loading_phase: 0.0,
@@ -303,6 +307,9 @@ impl Gallery {
             Message::ContextMenuSelect(id) => {
                 self.context_menu_open = false;
                 self.theme_status = format!("ContextMenu 项 {id} 已执行");
+            }
+            Message::BreadcrumbSelect(id) => {
+                self.breadcrumb_selected = id;
             }
             Message::ContextMenuKey(key) => match key {
                 hud_widgets::context_menu::ContextMenuKey::Previous => {
@@ -617,6 +624,7 @@ impl Gallery {
     }
 
     fn components_page(&self) -> Element<'_, Message> {
+        use hud_widgets::breadcrumb::{breadcrumb, BreadcrumbItem};
         use hud_widgets::button::{class, ButtonVariant};
         use hud_widgets::context_menu::{context_menu, ContextMenuItem};
         use hud_widgets::decor::{CornerBrackets, SlantedStripes};
@@ -629,6 +637,16 @@ impl Gallery {
         use hud_widgets::typography::{card, secondary_text, section_header};
 
         let tokens = self.theme.tokens;
+        let breadcrumb_items = [
+            BreadcrumbItem::new(0, "首页 / HOME"),
+            BreadcrumbItem::new(1, "系统 / SYSTEM"),
+            BreadcrumbItem::new(2, "组件 / COMPONENTS"),
+        ];
+        let breadcrumb_demo = breadcrumb(
+            breadcrumb_items.to_vec(),
+            self.breadcrumb_selected,
+            &Message::BreadcrumbSelect,
+        );
         let context_items = [
             ContextMenuItem::action(1, "打开 / OPEN"),
             ContextMenuItem::action(2, "重命名 / RENAME"),
@@ -876,6 +894,9 @@ impl Gallery {
         scrollable(
             column![
                 title_bar_demo,
+                section_header("导航", "NAVIGATION"),
+                breadcrumb_demo,
+                rule::horizontal(1),
                 section_header("基础组件", "CORE COMPONENTS"),
                 buttons,
                 rule::horizontal(1),
