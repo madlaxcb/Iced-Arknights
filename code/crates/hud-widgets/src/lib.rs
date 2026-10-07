@@ -19,6 +19,7 @@ pub mod modal;
 pub mod nav;
 pub mod panel;
 pub mod progress;
+pub mod split_pane;
 pub mod status_panel;
 pub mod table;
 pub mod tabs;

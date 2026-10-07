@@ -124,6 +124,7 @@ struct Gallery {
     context_menu_open: bool,
     context_menu_state: hud_widgets::context_menu::ContextMenuState,
     breadcrumb_selected: usize,
+    split_pane_state: hud_widgets::split_pane::SplitPaneState,
     toasts: hud_widgets::toast::ToastState,
     loading_on: bool,
     loading_phase: f32,
@@ -205,6 +206,8 @@ enum Message {
     ContextMenuKey(hud_widgets::context_menu::ContextMenuKey),
     /// 切换 Breadcrumb 项
     BreadcrumbSelect(usize),
+    /// 调整 SplitPane 比例
+    SplitPaneRatio(f32),
 }
 
 impl Gallery {
@@ -227,6 +230,7 @@ impl Gallery {
                 context_menu_open: false,
                 context_menu_state: hud_widgets::context_menu::ContextMenuState::new(),
                 breadcrumb_selected: 2,
+                split_pane_state: hud_widgets::split_pane::SplitPaneState::default(),
                 toasts: hud_widgets::toast::ToastState::default(),
                 loading_on: true,
                 loading_phase: 0.0,
@@ -310,6 +314,9 @@ impl Gallery {
             }
             Message::BreadcrumbSelect(id) => {
                 self.breadcrumb_selected = id;
+            }
+            Message::SplitPaneRatio(ratio) => {
+                self.split_pane_state.ratio = hud_widgets::split_pane::clamp_ratio(ratio);
             }
             Message::ContextMenuKey(key) => match key {
                 hud_widgets::context_menu::ContextMenuKey::Previous => {
@@ -653,6 +660,31 @@ impl Gallery {
             ContextMenuItem::separator(3),
             ContextMenuItem::disabled(4, "删除 / DELETE（禁用）"),
         ];
+        let split_pane_demo = hud_widgets::split_pane::split_pane(
+            &self.split_pane_state,
+            container(column![
+                text("左侧 / PRIMARY").size(13),
+                text("节点列表区域").size(12),
+            ])
+            .padding(12)
+            .into(),
+            container(column![
+                text("右侧 / DETAIL").size(13),
+                text("详情与操作区域").size(12),
+            ])
+            .padding(12)
+            .into(),
+            Message::SplitPaneRatio,
+        );
+        let split_pane_demo = column![
+            text(format!(
+                "SplitPane / 分栏 {:.0}%",
+                self.split_pane_state.ratio * 100.0
+            ))
+            .size(14),
+            container(split_pane_demo).height(120),
+        ]
+        .spacing(8);
         let context_menu_demo = column![
             text("ContextMenu / 受控上下文菜单").size(14),
             button(text(if self.context_menu_open {
@@ -906,6 +938,9 @@ impl Gallery {
                 rule::horizontal(1),
                 section_header("上下文菜单", "CONTEXT MENU"),
                 context_menu_demo,
+                rule::horizontal(1),
+                section_header("分栏", "SPLIT PANE"),
+                split_pane_demo,
                 rule::horizontal(1),
                 section_header("页签", "TABS"),
                 tabs_demo,

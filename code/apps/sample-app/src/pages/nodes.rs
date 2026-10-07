@@ -122,13 +122,12 @@ pub fn nodes(s: &Sample) -> iced::Element<'_, Message, HudTheme> {
             },
         ]
         .spacing(tokens.geometry.space.s),
-        row![
-            iced::widget::container(list_panel)
-                .width(280.0)
-                .height(iced::Length::Shrink),
-            iced::widget::container(detail).width(iced::Length::Fill),
-        ]
-        .spacing(tokens.geometry.space.l),
+        hud_widgets::split_pane::split_pane(
+            &s.split_pane_state,
+            iced::widget::container(list_panel).padding(12).into(),
+            detail,
+            Message::SplitPaneRatio,
+        ),
     ]
     .spacing(tokens.geometry.space.m)
     .into()

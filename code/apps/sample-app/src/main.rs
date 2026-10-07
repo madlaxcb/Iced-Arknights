@@ -86,6 +86,8 @@ pub enum Message {
     LoadTick,
     /// 选择节点上的 Breadcrumb
     BreadcrumbSelect(usize),
+    /// 调整节点列表与详情的分栏比例
+    SplitPaneRatio(f32),
     /// 打开节点 ContextMenu
     OpenNodeContextMenu,
     /// 关闭节点 ContextMenu
@@ -126,6 +128,8 @@ pub struct Sample {
     pub selected: Option<usize>,
     /// Breadcrumb 当前节点路径索引
     pub breadcrumb_selected: usize,
+    /// 节点列表与详情的分栏比例
+    pub split_pane_state: hud_widgets::split_pane::SplitPaneState,
     /// 节点 ContextMenu 是否打开
     pub node_context_menu_open: bool,
     /// 节点 ContextMenu 键盘状态
@@ -194,6 +198,7 @@ impl Sample {
             link_online: true,
             selected: Some(0),
             breadcrumb_selected: 1,
+            split_pane_state: hud_widgets::split_pane::SplitPaneState::default(),
             node_context_menu_open: false,
             node_context_menu_state: hud_widgets::context_menu::ContextMenuState::new(),
             nodes,
@@ -240,6 +245,9 @@ impl Sample {
             Message::Nav(page) => self.page = page,
             Message::NodeSelect(i) => self.selected = Some(i),
             Message::BreadcrumbSelect(i) => self.breadcrumb_selected = i,
+            Message::SplitPaneRatio(ratio) => {
+                self.split_pane_state.ratio = hud_widgets::split_pane::clamp_ratio(ratio);
+            }
             Message::OpenNodeContextMenu => {
                 self.node_context_menu_open = true;
                 self.node_context_menu_state = hud_widgets::context_menu::ContextMenuState::new();
