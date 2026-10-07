@@ -54,9 +54,22 @@ pub fn nodes(s: &Sample) -> iced::Element<'_, Message, HudTheme> {
             };
 
             let mut detail_col = column![
-                iced::widget::row![iced::widget::text(n.name.clone()).size(20), status_badge,]
-                    .spacing(tokens.geometry.space.m)
-                    .align_y(iced::alignment::Vertical::Center),
+                iced::widget::row![
+                    hud_widgets::avatar::avatar(
+                        &n.name,
+                        48.0,
+                        None,
+                        Some(if n.online {
+                            hud_widgets::avatar::AvatarStatus::Online
+                        } else {
+                            hud_widgets::avatar::AvatarStatus::Offline
+                        }),
+                    ),
+                    iced::widget::text(n.name.clone()).size(20),
+                    status_badge,
+                ]
+                .spacing(tokens.geometry.space.m)
+                .align_y(iced::alignment::Vertical::Center),
                 kv(String::from("区域"), n.region.clone(), &tokens),
                 kv(
                     String::from("延迟"),

@@ -6,6 +6,7 @@
 
 pub use hud_theme::HudTheme;
 
+pub mod avatar;
 pub mod badge;
 pub mod breadcrumb;
 pub mod button;

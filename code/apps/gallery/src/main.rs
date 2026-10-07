@@ -874,6 +874,28 @@ impl Gallery {
             hud_widgets::badge::badge("故障 / FAULT", hud_widgets::badge::BadgeKind::Danger),
         ]
         .spacing(12);
+        let avatars = row![
+            hud_widgets::avatar::avatar(
+                "Lumen Alpha",
+                48.0,
+                None,
+                Some(hud_widgets::avatar::AvatarStatus::Online)
+            ),
+            hud_widgets::avatar::avatar(
+                "NX-02",
+                40.0,
+                None,
+                Some(hud_widgets::avatar::AvatarStatus::Busy)
+            ),
+            hud_widgets::avatar::avatar(
+                "",
+                32.0,
+                None,
+                Some(hud_widgets::avatar::AvatarStatus::Offline)
+            ),
+        ]
+        .spacing(12)
+        .align_y(iced::alignment::Vertical::Center);
 
         let v = self.slider_v / 100.0;
         let thin_bar = |value: f32| {
@@ -953,6 +975,9 @@ impl Gallery {
                 rule::horizontal(1),
                 section_header("徽标", "BADGE / TAG"),
                 badges,
+                rule::horizontal(1),
+                section_header("头像 / 图片框", "AVATAR / IMAGE"),
+                avatars,
                 rule::horizontal(1),
                 section_header("进度", "PROGRESS"),
                 progress_demo,
